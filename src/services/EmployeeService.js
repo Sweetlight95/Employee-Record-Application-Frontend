@@ -11,6 +11,10 @@ class EmployeeService{
     deleteEmployee(employeeId){
         return axios.delete(BASE_EMPLOYEE_URL + "/" + employeeId)
     }
+
+    saveEmployee(employee){
+        return axios.post(BASE_EMPLOYEE_URL, employee)
+    }
     
 }
 
