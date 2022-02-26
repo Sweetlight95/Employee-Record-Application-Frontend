@@ -1,15 +1,16 @@
 import React, {useState, useEffect}from 'react'
 import EmployeeService from '../services/EmployeeService'
 import {Link} from 'react-router-dom'
-const ListOfEmployee = () => {
+
+const ListOfEmployee = ({history}) => {
 
     const [employees, setEmployees] = useState([])
 
     useEffect(() => {
-        getAllEmployes();
+        getAllEmployees();
     }, [])
 
-    const getAllEmployes = () => {
+    const getAllEmployees = () => {
         EmployeeService.getAllEmployees().then((response) => {
             console.log(response)
             setEmployees(response.data)
@@ -21,11 +22,12 @@ const ListOfEmployee = () => {
 
     const deleteEmployeeHandler = (employeeId) => {
         EmployeeService.deleteEmployee(employeeId).then((response)=>{
-            getAllEmployes()
+            getAllEmployees()
         }).catch((error) => {
             console.log(error)
         })
     }
+
 
 
     return (
@@ -50,7 +52,9 @@ const ListOfEmployee = () => {
                     <td>{employee.email}</td>
                     <td>{employee.phoneNumber}</td>
                    <td>
-                    <button className = "btn btn-danger m-2" onClick={()=>deleteEmployeeHandler(employee.id)}>Delete</button>
+                     <Link className="btn btn-primary m-2" to={`/edit-employee/${employee.id}`}>Edit</Link>  
+                    <button className="btn btn-danger" onClick={()=>deleteEmployeeHandler(employee.id)}>Delete</button>
+                    
                    </td> 
                     
                 </tr>

@@ -15,7 +15,12 @@ class EmployeeService{
     saveEmployee(employee){
         return axios.post(BASE_EMPLOYEE_URL, employee)
     }
-    
+   editEmployee(employeeId, employee){
+       return axios.put(BASE_EMPLOYEE_URL + "/" + employeeId, employee )
+   } 
+   findAnEmployee(employeeId){
+       return axios.get(BASE_EMPLOYEE_URL + "/" + employeeId)
+   }
 }
 
 export default new EmployeeService();

@@ -9,6 +9,7 @@ function App() {
 <Route exact path="/" component = {ListOfEmployee}/>
 <Route path="/employees" component = {ListOfEmployee}/>
 <Route path = "/add-employee" component = {AddEmployee}/>
+<Route path = "/edit-employee/:id" component = {AddEmployee}/>
 </Switch>
 
 </div>

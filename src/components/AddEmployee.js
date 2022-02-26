@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from 'react'
 import EmployeeService from '../services/EmployeeService'
 
-const AddEmployee = ({history}) => {
+const AddEmployee = ({history, match}) => {
 
 const [firstName, setFirstName] = useState("")
 const [lastName, setLastName] = useState("")
@@ -14,26 +14,65 @@ const handleSubmit = (e)=>{
     
 }
 
+const CancelEmployeeHandler =(e)=>{
+    e.preventDefault()
+
+    history.push("/")
+}
+
 const saveEmployeeHandler = (e)=>{
 
     const employee = {firstName, lastName, email, phoneNumber}
 
     e.preventDefault()
 
-       EmployeeService.saveEmployee(employee).then((response)=>{
-        console.log(response.data)
-         history.push("/")
-    }).catch((error)=>{
-        console.log(error)
-    })
+    if (match.params.id){
+
+        EmployeeService.editEmployeeHandler(match.params.id, employee).then((response) => {
+
+            history.push("/")
+
+        }).catch((error) => {
+            console.log(error)
+        })
+        
+    }else {
+        EmployeeService.saveEmployee(employee).then((response)=>{
+            console.log(response.data)
+
+            history.push("/")
+
+        }).catch((error)=>{
+            console.log(error)
+        })   
+        }
 
 }
 
 
 useEffect(() => {
-    
+    EmployeeService.findAnEmployee(match.params.id).then((response) => {
+
+        setFirstName(response.data.firstName)
+        setLastName(response.data.lastName)
+        setEmail(response.data.email)
+        setPhoneNumber(response.data.phoneNumber)
+    }).catch((error)=>{
+        console.log(error)
+    })
 
 }, [])
+
+
+    const Label = ()=>{
+        
+        if (match.params.id){
+            return <h2 className="text-center">Update Employee Details</h2>
+        }else {
+            return <h2 className="text-center">Add Employee Details</h2>
+        }
+    }
+
 
 
     return (
@@ -43,6 +82,7 @@ useEffect(() => {
         <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
                 <div className="card-body">
+                    {Label()}
                     <form onSubmit={(e)=>{handleSubmit(e)}}>
                         <div className="form-group mb-2">
                         <label >firstName:</label>
@@ -83,6 +123,8 @@ useEffect(() => {
                             onChange={(e)=>setPhoneNumber(e.target.value)}/>
                         </div>
                         <button onClick={(e)=>saveEmployeeHandler(e)}>Save Employee</button>
+
+                        <button onClick={(e)=>CancelEmployeeHandler(e)}>Cancel</button>
                     </form>
                 </div>
             </div>
